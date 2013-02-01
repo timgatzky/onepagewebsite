@@ -253,7 +253,7 @@ class OnePageWebsite extends Backend
 		while($objPages->next())
 		{
 			// fetch layout, either selected manually or by fallback (default layout) 
-			$objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE fallback=1 OR id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")
+			$objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")
 										->limit(1)
 										->execute($objPages->id);
 			// fix: #1
@@ -306,7 +306,15 @@ class OnePageWebsite extends Backend
 			// return if no layout is selected or inherited to this page
 			if($objLayout->numRows < 1)
 			{
-				return '';
+				// try the default page layout
+				$objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE fallback=1")
+										->limit(1)
+										->execute();
+				
+				if($objLayout->numRows < 1)
+				{
+					return '';
+				}
 			}
 			
 						
