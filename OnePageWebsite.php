@@ -65,6 +65,11 @@ class OnePageWebsite extends Backend
 	{
 		$arrPageData = $this->getModulesInPageLayouts($arrPages);
 		
+		if(count($arrPageData) < 1)
+		{
+			return '';
+		}
+		
 		// insert articles in placeholders in modules array
 		foreach ($arrPageData as $pageId => $sections)
 		{
@@ -233,6 +238,9 @@ class OnePageWebsite extends Backend
 			$arrPages = array($arrPages);
 		}
 		
+		// global page object
+		global $objPage;	
+		
 		// get Database Result object for all pages
 		$objPages = $this->Database->execute("SELECT * FROM tl_page WHERE id IN(".implode(',',$arrPages).")");
 
@@ -244,14 +252,64 @@ class OnePageWebsite extends Backend
 		// walk pages
 		while($objPages->next())
 		{
+			// fetch layout, either selected manually or by fallback (default layout) 
 			$objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE fallback=1 OR id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")
 										->limit(1)
 										->execute($objPages->id);
-			if($objLayout->numRows < 0)
+			// fix: #1
+			// if neither one is available search parent pages for manually selected layouts
+			if($objLayout->numRows < 1)
 			{
-				continue;
+				
+				$arrParents = array();
+				foreach($objPage->trail as $p)
+				{
+					// ignore root page
+					if($p == $objPage->rootId)
+					{
+						continue;
+					}
+					$arrParents[] = $p;
+				}
+				
+				// move on to next page
+				if(count($arrParents) < 1)
+				{
+					continue;
+				}
+				
+				
+				// walk parents backwards to find an inherited layout
+				$arrParents = array_reverse($arrParents);
+				
+				// fetch parent pages
+				$objParents = $this->Database->prepare("SELECT * FROM tl_page WHERE id IN(".implode(',',$arrParents).")")
+								->execute();
+				if($objParents->numRows < 1)
+				{
+					continue;
+				}
+				
+				while($objParents->next())
+				{
+					$objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")
+										->limit(1)
+										->execute($objParents->id);
+					if($objLayout->numRows < 1)
+					{
+						// check next parent
+						continue;
+					}
+				}
 			}
-
+			
+			// return if no layout is selected or inherited to this page
+			if($objLayout->numRows < 1)
+			{
+				return '';
+			}
+			
+						
 			$index = $objPages->id;
 			while($objLayout->next())
 			{
