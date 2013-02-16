@@ -223,6 +223,129 @@ class OnePageWebsite extends Backend
 	
 	
 	/**
+	 * Get ids of parent records and return as array
+	 * @param string
+	 * @param integer
+	 * @return array
+	 */
+	protected function getParentRecords($strTable, $intId)
+	{
+		$arrParent = array();
+
+		do
+		{
+			// Get the pid
+			$objParent = $this->Database->prepare("SELECT pid FROM " . $strTable . " WHERE id=?")
+										->limit(1)
+										->execute($intId);
+
+			if ($objParent->numRows < 1)
+			{
+				break;
+			}
+
+			$intId = $objParent->pid;
+
+			// store id
+			$arrParent[] = $intId;
+
+		}
+		while ($intId);
+
+		if (empty($arrParent))
+		{
+			return array();
+		}
+		
+		return $arrParent;
+	}
+	
+	/**
+	 * Get layout object
+	 * @param integer
+	 * @return object
+	 */
+	protected function getPageLayout($intPage)
+	{
+		// global page object
+		global $objPage;	
+		
+		
+		// fetch layout, either selected manually or by fallback (default layout) 
+		$objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")
+									->limit(1)
+									->execute($objPages->id);
+		
+		// fix: #1
+		// if neither one is available search parent pages for manually selected layouts
+		if($objLayout->numRows < 1)
+		{
+			// get parent ids
+			$arrParents = $this->getParentRecords('tl_page',$intPage);
+			
+			$tmp = array();
+			foreach($arrParents as $id)
+			{
+				if($id > 0 && $id != $objPage->rootId)
+				{
+					$tmp[] = $id;
+				}
+			}
+			$arrParents = $tmp;
+			unset($tmp);
+			
+			// move on to next page
+			if(count($arrParents) < 1)
+			{
+				continue;
+			}
+			
+			// walk parents backwards to find an inherited layout
+			$arrParents = array_reverse($arrParents);
+			
+			// fetch parent pages
+			$objParents = $this->Database->prepare("SELECT * FROM tl_page WHERE id IN(".implode(',',$arrParents).")")
+							->execute();
+			if($objParents->numRows < 1)
+			{
+				continue;
+			}
+			
+			while($objParents->next())
+			{
+				$objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")
+									->limit(1)
+									->execute($objParents->id);
+				if($objLayout->numRows < 1)
+				{
+					// check next parent
+					continue;
+				}
+			}
+		}
+		
+		
+		// return if no layout is selected or inherited to this page
+		if($objLayout->numRows < 1)
+		{
+			// try the default page layout
+			$objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE fallback=1")
+									->limit(1)
+									->execute();
+			
+			if($objLayout->numRows < 1)
+			{
+				return '';
+			}
+		}
+				
+		
+		return $objLayout;
+	}
+	
+	
+	
+	/**
 	 * Get modules included in pages and return as array with page id as key
 	 * @param array
 	 * @return array
@@ -252,71 +375,7 @@ class OnePageWebsite extends Backend
 		// walk pages
 		while($objPages->next())
 		{
-			// fetch layout, either selected manually or by fallback (default layout) 
-			$objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")
-										->limit(1)
-										->execute($objPages->id);
-			// fix: #1
-			// if neither one is available search parent pages for manually selected layouts
-			if($objLayout->numRows < 1)
-			{
-				
-				$arrParents = array();
-				foreach($objPage->trail as $p)
-				{
-					// ignore root page
-					if($p == $objPage->rootId)
-					{
-						continue;
-					}
-					$arrParents[] = $p;
-				}
-				
-				// move on to next page
-				if(count($arrParents) < 1)
-				{
-					continue;
-				}
-				
-				
-				// walk parents backwards to find an inherited layout
-				$arrParents = array_reverse($arrParents);
-				
-				// fetch parent pages
-				$objParents = $this->Database->prepare("SELECT * FROM tl_page WHERE id IN(".implode(',',$arrParents).")")
-								->execute();
-				if($objParents->numRows < 1)
-				{
-					continue;
-				}
-				
-				while($objParents->next())
-				{
-					$objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")
-										->limit(1)
-										->execute($objParents->id);
-					if($objLayout->numRows < 1)
-					{
-						// check next parent
-						continue;
-					}
-				}
-			}
-			
-			// return if no layout is selected or inherited to this page
-			if($objLayout->numRows < 1)
-			{
-				// try the default page layout
-				$objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE fallback=1")
-										->limit(1)
-										->execute();
-				
-				if($objLayout->numRows < 1)
-				{
-					return '';
-				}
-			}
-			
+			$objLayout = $this->getPageLayout($objPages->id);
 						
 			$index = $objPages->id;
 			while($objLayout->next())
@@ -354,7 +413,7 @@ class OnePageWebsite extends Backend
 				}
 			}
 		}
-
+		
 		return $arrModules;
 	}
 
