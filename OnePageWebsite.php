@@ -231,27 +231,27 @@ class OnePageWebsite extends Backend
 	protected function getParentRecords($strTable, $intId)
 	{
 		$arrParent = array();
-
+	
 		do
 		{
 			// Get the pid
 			$objParent = $this->Database->prepare("SELECT pid FROM " . $strTable . " WHERE id=?")
 										->limit(1)
 										->execute($intId);
-
+	
 			if ($objParent->numRows < 1)
 			{
 				break;
 			}
-
+	
 			$intId = $objParent->pid;
-
+	
 			// store id
 			$arrParent[] = $intId;
-
+	
 		}
 		while ($intId);
-
+	
 		if (empty($arrParent))
 		{
 			return array();
@@ -443,15 +443,18 @@ class OnePageWebsite extends Backend
 		$arrReturn = array();
 		while($objArticles->next())
 		{
-			$strHtml = $this->replaceInsertTags('{{insert_article::'.$objArticles->id.'}}');
-			#$html = $this->getArticle($objArticles->alias, false, true);
-			#$html = $this->getContentElement($objArticles->id);
-
+			// fix 2: generate the whole article section. The inserttag only generates the content. 
+			#$strHtml = $this->replaceInsertTags('{{insert_article::'.$objArticles->id.'}}');
+			
+			$objRow = $this->Database->prepare("SELECT * FROM tl_article WHERE id=?")->limit(1)->execute($objArticles->id);
+			
+			// mimic module article
+			$tmp = new ModuleArticle($objRow);
+			$strHtml = $tmp->generate(false);
+			
 			// handle empty articles
 			if(!strlen($strHtml))
 			{
-				// skip empty articles
-				#continue;
 				// generate an empty article
 				$objArticleTpl = new FrontendTemplate('mod_article');
 				$objArticleTpl->class = 'mod_article';
