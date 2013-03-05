@@ -53,8 +53,6 @@ class ModuleOnePageWebsiteCustom extends Module
 			return $this->Template->parse();
 		}
 		
-		$this->cssID = array(1=>'mod_onepagewebsite');
-		
 		return parent::generate();
 	}
 

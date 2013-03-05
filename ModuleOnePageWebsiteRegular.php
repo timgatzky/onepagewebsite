@@ -53,8 +53,6 @@ class ModuleOnePageWebsiteRegular extends Module
 			return $this->Template->parse();
 		}
 		
-		$this->cssID = array(1=>'mod_onepagewebsite');
-		
 		return parent::generate();
 	}
 
@@ -82,7 +80,7 @@ class ModuleOnePageWebsiteRegular extends Module
 		{
 			$startPage = $this->rootPage;
 		}
-						
+								
 		// add pages to template
 		$this->Template->items = $this->OnePageWebsite->generatePage($startPage,$level);
 	}
