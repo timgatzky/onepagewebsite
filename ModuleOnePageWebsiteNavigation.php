@@ -61,6 +61,7 @@ class ModuleOnePageWebsiteNavigation extends ModuleNavigation
 
 		$this->rootModule = $this->rootPage;
 
+		// fetch reference module
 		$objModule = $this->Database->prepare("SELECT * FROM tl_module WHERE id=?")
 		->limit(1)
 		->execute($this->rootModule);
@@ -69,8 +70,11 @@ class ModuleOnePageWebsiteNavigation extends ModuleNavigation
 		{
 			return '';
 		}
-
-		$this->Template->items = $this->renderNavigation($objModule->rootPage);
+		
+		// set new reference page
+		$this->rootPage = $objModule->rootPage;
+		
+		$this->Template->items = $this->renderNavigation($this->rootPage);
 	}
 
 
@@ -114,8 +118,11 @@ class ModuleOnePageWebsiteNavigation extends ModuleNavigation
 		$objTemplate->type = get_class($this);
 		$objTemplate->level = 'level_' . $level++;
 
-		// Get page object
+		// Get page objects
 		global $objPage;
+		// reference page
+		$objRootPage = $this->Database->prepare("SELECT * FROM tl_page WHERE id=?")->limit(1)->execute($this->rootPage);
+					
 
 		// Browse subpages
 		while($objSubpages->next())
@@ -138,9 +145,9 @@ class ModuleOnePageWebsiteNavigation extends ModuleNavigation
 					$subitems = $this->renderNavigation($objSubpages->id, $level);
 				}
 
-				$href = $this->replaceInsertTags('{{env::request}}') . '#page' .$objSubpages->id;
-
-
+				// href
+				$href = $this->generateFrontendUrl($objRootPage->row()) . '#page' .$objSubpages->id;	
+				
 				$strClass = (($subitems != '') ? 'submenu' : '') . ($objSubpages->protected ? ' protected' : '') . (($objSubpages->cssClass != '') ? ' ' . $objSubpages->cssClass : '') . (in_array($objSubpages->id, $objPage->trail) ? ' trail' : '');
 
 				// Mark pages on the same level (see #2419)
