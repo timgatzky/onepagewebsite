@@ -20,9 +20,9 @@ ClassLoader::addClasses(array
 	'OnePageWebsite'              			=> 'system/modules/OnePageWebsite/classes/OnePageWebsite.php',
 
 	// Modules
-	'ModuleOnePageWebsiteCustom'        	=> 'system/modules/OnePageWebsite/modules/ModuleOnePageWebsiteCustom.php',
-	'ModuleOnePageWebsiteNavigation' 		=> 'system/modules/OnePageWebsite/modules/ModuleOnePageWebsiteNavigation.php',
-	'ModuleOnePageWebsiteRegular'    		=> 'system/modules/OnePageWebsite/modules/ModuleOnePageWebsiteRegular.php',
+	'ModuleOnePageWebsiteCustom'        	=> 'system/modules/OnePageWebsite/ModuleOnePageWebsiteCustom.php',
+	'ModuleOnePageWebsiteNavigation' 		=> 'system/modules/OnePageWebsite/ModuleOnePageWebsiteNavigation.php',
+	'ModuleOnePageWebsiteRegular'    		=> 'system/modules/OnePageWebsite/ModuleOnePageWebsiteRegular.php',
 ));
 
 
