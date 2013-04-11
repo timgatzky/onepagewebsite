@@ -27,7 +27,6 @@ class ModuleOnePageWebsiteRegular extends \Module
 	 */
 	public function generate()
 	{
-		FB::log(TL_MODE);
 		if (TL_MODE == 'BE')
 		{
 			$this->Template = new BackendTemplate('be_wildcard');
