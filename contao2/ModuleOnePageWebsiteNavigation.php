@@ -156,7 +156,11 @@ class ModuleOnePageWebsiteNavigation extends ModuleNavigation
 				}
 
 				// href
-				$href = $this->generateFrontendUrl($objJumpTo->row()) . '#page' .$objSubpages->id;	
+				$href = '#page' .$objSubpages->id;
+				if($this->jumpTo != $objPage->id)
+				{
+					$href = $this->generateFrontendUrl($objJumpTo->row()) . '#page' .$objSubpages->id;
+				}		
 				
 				$strClass = (($subitems != '') ? 'submenu' : '') . ($objSubpages->protected ? ' protected' : '') . (($objSubpages->cssClass != '') ? ' ' . $objSubpages->cssClass : '') . (in_array($objSubpages->id, $objPage->trail) ? ' trail' : '');
 
