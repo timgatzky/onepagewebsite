@@ -29,7 +29,7 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 
 			return $this->Template->parse();
 		}
-
+		
 		return parent::generate();
 	}
 
@@ -43,20 +43,20 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 			return '';
 		}
 		global $objPage;
-
+		
 		// I know its not nice but yes I use the rootPage field for the module selection
 		$this->rootModule = $this->rootPage;
 
 		$objDatabase = \Database::getInstance();
-
+		
 		// fetch reference module
 		$objModule = $objDatabase->prepare("SELECT * FROM tl_module WHERE id=?")
 		->limit(1)
 		->execute($this->rootModule);
-
+		
 		if($objModule->numRows < 1)
 		{
-			return '';
+		   return '';
 		}
 		
 		// set rootPage from module
@@ -67,7 +67,11 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 		{
 			$this->jumpTo = $objPage->id;
 		}
-		
+	
+		#(issue 1)
+		$this->Template->skipId = 'skipNavigation' . $this->id;
+		$this->Template->skipNavigation = specialchars($GLOBALS['TL_LANG']['MSC']['skipNavigation']);
+	
 		$this->Template->items = $this->renderNavigation($this->rootPage);
 	}
 
@@ -143,11 +147,7 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 				}
 
 				// href
-				$href = '#page' .$objSubpages->id;
-				if($this->jumpTo != $objPage->id)
-				{
-					$href = $this->generateFrontendUrl($objJumpTo->row()) . '#page' .$objSubpages->id;
-				}		
+				$href = $this->generateFrontendUrl($objJumpTo->row()) . '#page' .$objSubpages->id;
 				
 				$strClass = (($subitems != '') ? 'submenu' : '') . ($objSubpages->protected ? ' protected' : '') . (($objSubpages->cssClass != '') ? ' ' . $objSubpages->cssClass : '') . (in_array($objSubpages->id, $objPage->trail) ? ' trail' : '');
 

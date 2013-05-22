@@ -83,6 +83,10 @@ class ModuleOnePageWebsiteNavigation extends ModuleNavigation
 			$this->jumpTo = $objPage->id;
 		}
 		
+		#(issue 1)
+		$this->Template->skipId = 'skipNavigation' . $this->id;
+		$this->Template->skipNavigation = specialchars($GLOBALS['TL_LANG']['MSC']['skipNavigation']);
+		
 		$this->Template->items = $this->renderNavigation($this->rootPage);
 	}
 
@@ -156,11 +160,7 @@ class ModuleOnePageWebsiteNavigation extends ModuleNavigation
 				}
 
 				// href
-				$href = '#page' .$objSubpages->id;
-				if($this->jumpTo != $objPage->id)
-				{
-					$href = $this->generateFrontendUrl($objJumpTo->row()) . '#page' .$objSubpages->id;
-				}		
+				$href = $this->generateFrontendUrl($objJumpTo->row()) . '#page' .$objSubpages->id;
 				
 				$strClass = (($subitems != '') ? 'submenu' : '') . ($objSubpages->protected ? ' protected' : '') . (($objSubpages->cssClass != '') ? ' ' . $objSubpages->cssClass : '') . (in_array($objSubpages->id, $objPage->trail) ? ' trail' : '');
 
