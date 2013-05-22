@@ -83,7 +83,7 @@ class ModuleOnePageWebsiteNavigation extends ModuleNavigation
 			$this->jumpTo = $objPage->id;
 		}
 		
-		#(issue 1)
+		//(issue #2)
 		$this->Template->skipId = 'skipNavigation' . $this->id;
 		$this->Template->skipNavigation = specialchars($GLOBALS['TL_LANG']['MSC']['skipNavigation']);
 		
