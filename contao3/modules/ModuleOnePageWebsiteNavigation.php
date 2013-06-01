@@ -71,7 +71,7 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 		//(issue #2)
 		$this->Template->skipId = 'skipNavigation' . $this->id;
 		$this->Template->skipNavigation = specialchars($GLOBALS['TL_LANG']['MSC']['skipNavigation']);
-	
+		
 		$this->Template->items = $this->renderNavigation($this->rootPage);
 	}
 
@@ -83,7 +83,7 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 	 * @return string
 	 * Taken and modified from Modules.php
 	 */
-	protected function renderNavigation($pid, $level=1)
+	protected function renderNavigation($pid, $level=1, $host = NULL, $language = NULL)
 	{
 		$objDatabase = \Database::getInstance();
 
