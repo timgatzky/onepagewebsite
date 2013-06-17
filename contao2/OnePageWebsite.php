@@ -270,11 +270,11 @@ class OnePageWebsite extends Backend
 		// global page object
 		global $objPage;	
 		
-		
+		// fix: #3 (select page layout from page id presented by function argument)
 		// fetch layout, either selected manually or by fallback (default layout) 
 		$objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")
 									->limit(1)
-									->execute($objPages->id);
+									->execute($intPage);
 		
 		// fix: #1
 		// if neither one is available search parent pages for manually selected layouts
