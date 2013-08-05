@@ -70,7 +70,8 @@ class ModuleOnePageWebsiteCustom extends Module
 		foreach($arrPages as $pid)
 		{
 			// add pages to template
-			$this->Template->items .= $this->OnePageWebsite->generatePage($pid,0);
+			#fix 4
+			$this->Template->items .= $this->OnePageWebsite->generatePage($pid,0,$this->opw_template);
 		}
 				
 		

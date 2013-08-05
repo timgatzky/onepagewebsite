@@ -67,7 +67,8 @@ class ModuleOnePageWebsiteRegular extends \Module
 		}
 								
 		// add pages to template
-		$this->Template->items = $objOnePageWebsite->generatePage($startPage,$level);
+		#fix 4: 
+		$this->Template->items = $objOnePageWebsite->generatePage($startPage,$level,$this->opw_template);
 	}
 }
 

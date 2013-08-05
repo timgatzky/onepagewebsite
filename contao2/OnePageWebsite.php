@@ -114,7 +114,8 @@ class OnePageWebsite extends Backend
 	 */
 	public function generatePage($pid,$level,$strTemplate='')
 	{
-		return $this->generatePagesRecursiv($pid,$level,$strTemplate='');
+		#fix 4
+		return $this->generatePagesRecursiv($pid,$level,$strTemplate);
 	}
 		
 	/**
@@ -171,7 +172,8 @@ class OnePageWebsite extends Backend
 			// do the same as the navigation here
 			if ($objSubpages->subpages > 0 && (!$this->showLevel || $this->showLevel >= $level || (!$this->hardLimit && ($objPage->id == $objSubpages->id || in_array($objPage->id, $this->getChildRecords($objSubpages->id, 'tl_page'))))))
 			{
-				$subpages = $this->generatePagesRecursiv($objSubpages->id, $level);
+				#fix 4
+				$subpages = $this->generatePagesRecursiv($objSubpages->id, $level, $strTemplate);
 			}
 			
 			$strClass = ' page page_' . $count;
