@@ -53,6 +53,15 @@ window.addEvent('domready', function()
 			}
 		});
 		
+		// set first button to active when on first page of website and no anchor is set
+		var strRequest = '<?php echo $this->replaceInsertTags('{{env::request}}') ?>';
+		if(location.hash.length == 0 && strRequest.length == 0)
+		{
+			objAnchors[0].addClass('active');
+			objAnchors[0].getParent('li').addClass('active');
+			last = objAnchors[0];
+		}
+		
 		// add eventhandlers
 		objAnchors.addEvent('click',function()
 		{
