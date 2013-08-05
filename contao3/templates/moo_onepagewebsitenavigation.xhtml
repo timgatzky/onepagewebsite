@@ -1,0 +1,92 @@
+<script type="text/javascript">
+/* <![CDATA[ */
+
+/**
+ * Toggle active state for OnePageWebsite Navigation module
+ */
+window.addEvent('domready', function() 
+{
+	var objNavi = $$('.mod_onepagewebsitenavigation');
+	if(objNavi.length < 1)
+	{
+		return;
+	}
+	
+	// examine url params for hash params
+	var strHash = window.location.hash;
+	var arrHash = strHash.split("#");
+	var arrParamsIgnore = new Array('top');
+	var params = new Array();
+	for(var i=0; i<arrHash.length; ++i)
+	{
+		if(arrHash[i].length > 0)
+		{
+			var hash = arrHash[i].replace('#','');
+			if(!arrParamsIgnore.contains(hash))
+			{
+				params.push(arrHash[i]);
+			}
+		} 
+	}
+	
+	
+	var last = null;
+	
+	// circle through all navigation elements
+	objNavi.each(function(navi)
+	{
+		// get all possible buttons
+		var objAnchors = navi.getElements('li > a');
+		
+		// set state on load
+		objAnchors.each(function(anchor)
+		{
+			var href = anchor.get('href');
+			href = href.replace('#', '');
+			
+			if(params.contains(href))
+			{
+				anchor.addClass('active');
+				anchor.getParent('li').addClass('active');
+			
+				last = anchor;
+			}
+		});
+		
+		// set first button to active when on first page of website and no anchor is set
+		var strRequest = '<?php echo $this->replaceInsertTags('{{env::request}}') ?>';
+		if(location.hash.length == 0)
+		{
+			objAnchors[0].addClass('active');
+			objAnchors[0].getParent('li').addClass('active');
+			last = objAnchors[0];
+		}
+		
+		// add eventhandlers
+		objAnchors.addEvent('click',function()
+		{
+			if(last != this)
+			{
+				if(last != null)
+				{
+					last.removeClass('active');
+					last.getParent('li').removeClass('active');
+				}
+				
+				// get anchor
+				var href = this.get('href');
+				href = href.replace('#', '');
+				
+				this.addClass('active');
+				this.getParent('li').addClass('active');
+				
+				last = this;
+			}
+		});
+	});
+
+});
+
+
+/* ]]> */
+</script>
