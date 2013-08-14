@@ -450,6 +450,12 @@ class OnePageWebsite extends Backend
 			
 			$objRow = $this->Database->prepare("SELECT * FROM tl_article WHERE id=?")->limit(1)->execute($objArticles->id);
 			
+			// handle teasers
+			if($objRow->showTeaser)
+			{
+				$objRow->multiMode = 1;
+			}
+			
 			// mimic module article
 			$tmp = new ModuleArticle($objRow);
 			$strHtml = $tmp->generate(false);
