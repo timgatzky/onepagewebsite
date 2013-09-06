@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
@@ -29,14 +29,25 @@
  */
 
 /**
+ * Namespaces
+ */
+namespace OnePageWebsite;
+
+/**
+ * Imports
+ */
+use \Database;
+use \FrontendTemplate;
+use \ModuleArticle;
+
+/**
  * core class OnePageWebsite
  * provids various functions
  */
-class OnePageWebsite extends \Backend
+class OnePageWebsite
 {
 	protected $arrPageData = array();
 	protected $arrPages = array();
-	
 	
 	public function __set($strKey, $varValue)
 	{
@@ -50,12 +61,7 @@ class OnePageWebsite extends \Backend
 				break;
 		}
 	}
-	
-	public function __get($strKey)
-	{
 		
-	}
-	
 	/**
 	 * Get page data / layout, replace article placeholders with articles and return as array with page id key
 	 * @param array
@@ -152,7 +158,7 @@ class OnePageWebsite extends \Backend
 			$strTemplate = 'opw_default';
 		}
 		
-		$objTemplate = new FrontendTemplate($strTemplate);
+		$objTemplate = new \FrontendTemplate($strTemplate);
 		$objTemplate->type = get_class($this);
 		$objTemplate->level = 'level_' . $level;
 		
@@ -204,7 +210,7 @@ class OnePageWebsite extends \Backend
 		$items[0]['class'] = trim($items[0]['class'] . ' first');
 		$items[$last]['class'] = trim($items[$last]['class'] . ' last');
 		
-		
+	
 		// HOOK allow custom page data
 		if (isset($GLOBALS['TL_HOOKS']['ONE_PAGE_WEBSITE']['generatePage']) && count($GLOBALS['TL_HOOKS']['ONE_PAGE_WEBSITE']['generatePage']))
 		{
@@ -467,14 +473,14 @@ class OnePageWebsite extends \Backend
 			}
 			
 			// mimic module article
-			$tmp = new ModuleArticle($objRow);
+			$tmp = new \ModuleArticle($objRow);
 			$strHtml = $tmp->generate(false);
 			
 			// handle empty articles
 			if(!strlen($strHtml))
 			{
 				// generate an empty article
-				$objArticleTpl = new FrontendTemplate('mod_article');
+				$objArticleTpl = new \FrontendTemplate('mod_article');
 				$objArticleTpl->class = 'mod_article';
 				$objArticleTpl->elements = array();
 				$strHtml = $objArticleTpl->parse();
@@ -551,72 +557,5 @@ class OnePageWebsite extends \Backend
 		}
 		return $this->arrPages;
 	}
-
-
-#	/**
-#	 * Filter pages
-#	 * @param array
-#	 * @return array
-#	 */
-#	private function getFilteredPageRecords($arrPages)
-#	{
-#		if(!count($arrPages))
-#		{
-#			return array();
-#		}
-#		
-#		if(!is_array($arrPages))
-#		{
-#			$arrPages = array($arrPages);
-#		}
-#		
-#		$time = time();
-#		$strWhereP1="p1.published=1 AND p1.opw_hide!=1 AND p1.type='regular' AND (p1.start='' OR p1.start<".$time.") AND (p1.stop='' OR p1.stop>".$time.")";
-#		$strWhereP2="p2.published=1 AND p2.opw_hide!=1 AND p2.type='regular' AND (p2.start='' OR p2.start<".$time.") AND (p2.stop='' OR p2.stop>".$time.")";
-#		
-#		// get unnested parent pages
-#		$arrParents = $this->eliminateNestedPages($arrPages, 'tl_page', true);
-#		
-#		$arrReturn = array();
-#		$arrSkipChilds = array();
-#		
-#		foreach($arrPages as $i => $id)
-#		{
-#			if(in_array($id, $arrSkipChilds))
-#			{
-#				continue;
-#			}
-#			
-#			// filter page and check for published subpages
-#			$objPage = $this->Database->prepare("SELECT p1.* FROM tl_page p1 WHERE p1.id=? AND " . $strWhereP1)
-#							->limit(1)
-#							->execute($id);
-#			
-#			if($objPage->numRows > 0)
-#			{
-#				// store current page
-#				$arrReturn[] = $objPage->id;
-#				// check for published subpages
-#				$objSubpage = $this->Database->prepare("SELECT p1.*, (SELECT p2.id FROM tl_page p2 WHERE p2.pid=p1.id AND ".$strWhereP2.") AS subpage FROM tl_page p1 WHERE ".$strWhereP1)
-#											->limit(1)
-#											->execute($id);
-#				if($objSubpage->subpage)
-#				{
-#					$next = $arrPages[$i+1];
-#					// skip all the following childs if the next page is not a level_0 page (parent page)
-#					if(!in_array($next, $arrParents))
-#					{
-#						$arrSkipChilds = array_merge(array($next), $this->getChildRecords($next,'tl_page'));
-#					}
-#				}
-#			}
-#		}
-#
-#		return $arrReturn;
-#	}
-
-
-
+	
 }
-
-?>

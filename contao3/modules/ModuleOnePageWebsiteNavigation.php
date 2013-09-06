@@ -7,12 +7,25 @@
  * 
  * @copyright	Tim Gatzky 2013
  * @author		Tim Gatzky <info@tim-gatzky.de>
- * @package		OnePageWesbite
+ * @package		OnePageWebsite
  * @link		http://contao.org
  * @license		http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
+/**
+ * Namespaces
+ */
+namespace OnePageWebsite;
 
+/**
+ * Imports
+ */
+use \Database;
+use \FrontendTemplate;
+
+/**
+ * Classes
+ */
 class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 {
 	/**
@@ -114,7 +127,7 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 			$this->navigationTpl = 'nav_default';
 		}
 
-		$objTemplate = new FrontendTemplate($this->navigationTpl);
+		$objTemplate = new \FrontendTemplate($this->navigationTpl);
 
 		$objTemplate->type = get_class($this);
 		$objTemplate->level = 'level_' . $level++;
@@ -202,5 +215,3 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 	}
 
 }
-
-?>

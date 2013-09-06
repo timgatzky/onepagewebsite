@@ -7,11 +7,19 @@
  * 
  * @copyright	Tim Gatzky 2013
  * @author		Tim Gatzky <info@tim-gatzky.de>
- * @package		OnePageWesbite
+ * @package		OnePageWebsite
  * @link		http://contao.org
  * @license		http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
+/**
+ * Namespaces
+ */
+namespace OnePageWebsite;
+
+/**
+ * Classes
+ */
 class ModuleOnePageWebsiteCustom extends \Module
 {
 	/**
@@ -43,9 +51,9 @@ class ModuleOnePageWebsiteCustom extends \Module
 	 */
 	protected function compile()
 	{
-		$this->import('OnePageWebsite');
-		$this->OnePageWebsite->__set('hardLimit',$this->hardLimit);
-		$this->OnePageWebsite->__set('showLevel',$this->showLevel);
+		$objOnePageWebsite = new OnePageWebsite;
+		$objOnePageWebsite->__set('hardLimit',$this->hardLimit);
+		$objOnePageWebsite->__set('showLevel',$this->showLevel);
 		
 		$arrPages = deserialize($this->pages);
 		
@@ -65,9 +73,6 @@ class ModuleOnePageWebsiteCustom extends \Module
 			#fix 4
 			$this->Template->items .= $this->OnePageWebsite->generatePage($pid,0,$this->opw_template);
 		}
-				
-		
 	}
+	
 }
-
-?>

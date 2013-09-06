@@ -51,7 +51,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['opw_mod_template'] = array
 
 
 
-class tl_module_onePageWebsite extends Backend
+class tl_module_onePageWebsite extends \Backend
 {
 	/**
 	 * Modify field dca depending on loaded module
@@ -60,7 +60,9 @@ class tl_module_onePageWebsite extends Backend
 	 */
 	public function modifyFieldDca(DataContainer $dc)
 	{
-		$objModule = $this->Database->execute("SELECT type FROM tl_module WHERE id=" . $dc->id . " LIMIT 1");
+		$objDatabase = \Database::getInstance();
+		
+		$objModule = $objDatabase->execute("SELECT type FROM tl_module WHERE id=" . $dc->id . " LIMIT 1");
 		
 		if($objModule->type == 'onepagewebsiteregular')
 		{
@@ -91,7 +93,9 @@ class tl_module_onePageWebsite extends Backend
 	{
 		$arrReturn = array();
 		
-		$objModules = $this->Database->execute("SELECT * FROM tl_module WHERE type IN('onepagewebsiteregular','onepagewebsitecustom')");
+		$objDatabase = \Database::getInstance();
+		
+		$objModules = $objDatabase->execute("SELECT * FROM tl_module WHERE type IN('onepagewebsiteregular','onepagewebsitecustom')");
 		
 		if($objModules->numRows < 1)
 		{
@@ -107,5 +111,3 @@ class tl_module_onePageWebsite extends Backend
 	}
 
 }
-
-?>

@@ -44,6 +44,3 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['opw_hide'] = array
 	'eval'              => array('tl_class'=>'w50'),
 	'sql'               => "char(1) NOT NULL default ''"
 );
-
-
-?>
