@@ -18,12 +18,6 @@
 namespace OnePageWebsite;
 
 /**
- * Imports
- */
-use \Database;
-use \FrontendTemplate;
-
-/**
  * Classes
  */
 class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
@@ -36,7 +30,7 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 	{
 		if (TL_MODE == 'BE')
 		{
-			$this->Template = new BackendTemplate('be_wildcard');
+			$this->Template = new \BackendTemplate('be_wildcard');
 			$this->Template->wildcard = '### ONE-PAGE-WEBSITE :: NAVIGATION ###' . "<br>" . $GLOBALS['TL_LANG']['FMD'][$this->type][0];
 			$this->Template->title = $this->headline;
 
@@ -63,9 +57,7 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 		$objDatabase = \Database::getInstance();
 		
 		// fetch reference module
-		$objModule = $objDatabase->prepare("SELECT * FROM tl_module WHERE id=?")
-		->limit(1)
-		->execute($this->rootModule);
+		$objModule = $objDatabase->prepare("SELECT * FROM tl_module WHERE id=?")->limit(1)->execute($this->rootModule);
 		
 		if($objModule->numRows < 1)
 		{
@@ -142,7 +134,7 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 		while($objSubpages->next())
 		{
 			// Skip hidden sitemap pages
-			if ($this instanceof ModuleSitemap && $objSubpages->sitemap == 'map_never')
+			if ($this instanceof \ModuleSitemap && $objSubpages->sitemap == 'map_never')
 			{
 				continue;
 			}
@@ -160,7 +152,7 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 				}
 
 				// href
-				if($objJumpTo->id != $objPage->id)
+				if($objJumpTo->id != $objPage->id || $objPage->id != $objPage->rootId)
 				{
 					$href = $this->generateFrontendUrl($objJumpTo->row()) . '#page' .$objSubpages->id;
 				}
