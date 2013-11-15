@@ -1,0 +1,13 @@
+<script type="text/javascript">
+/* <![CDATA[ */
+
+/**
+ * SmoothScroll
+ */
+window.addEvent('domready', function() 
+{
+	new Fx.SmoothScroll({ duration: 800 },window);
+});
+
+/* ]]> */
+</script>
