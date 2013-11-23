@@ -50,7 +50,7 @@ class TableModule extends \Backend
 				'label'            => &$GLOBALS['TL_LANG']['tl_module']['rootModule'],
 				'exclude'          => false,
 				'inputType'        => 'radio',
-				'options_callback' => array('OnePageWebsite\TableModule','getModules'),
+				'options_callback' => array('OnePageWebsite\Backend\TableModule','getModules'),
 			); 
 		}
 		
