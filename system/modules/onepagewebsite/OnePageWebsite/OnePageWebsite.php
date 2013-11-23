@@ -189,8 +189,9 @@ class OnePageWebsite extends \Controller
 			$arrClass = array('page','page_'.$count);
 			// even odd
 			$count%2 == 0 ? $arrClass[] = 'even' : $arrClass[] = 'odd';
-			$arrClass[] = (($subpages != '') ? $arrClass[] = 'subpage' : '') . ($objSubpages->protected ? $arrClass[] = 'protected' : '') . (($objSubpages->cssClass != '') ? $arrClass[] = $objSubpages->cssClass : '');
-			$arrClass = array_unique($arrClass);
+			$subpages != '' ? $arrClass[] = 'subpage' : '';
+			$objSubpages->protected ? $arrClass[] = 'protected' : '';
+			$objSubpages->cssClass != '' ? $arrClass[] = $objSubpages->cssClass : '';
 			
 			$items[] = array
 			(
