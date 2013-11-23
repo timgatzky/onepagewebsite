@@ -3,13 +3,13 @@
 /**
  * Contao Open Source CMS
  * 
- * Copyright (C) 2005-2012 Leo Feyer
+ * Copyright (C) 2005-2013 Leo Feyer
  * 
- * @package 	OnePageWebsite
  * @copyright	Tim Gatzky 2013
  * @author		Tim Gatzky <info@tim-gatzky.de>
- * @link    	http://contao.org
- * @license 	http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @package		OnePageWebsite
+ * @link		http://contao.org
+ * @license		http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
 /**
@@ -25,13 +25,11 @@ ClassLoader::addNamespaces(array
  */
 ClassLoader::addClasses(array
 (
-	// Classes
-	'OnePageWebsite\OnePageWebsite'						=> 'system/modules/OnePageWebsite/classes/OnePageWebsite.php',
-
-	// Modules
-	'OnePageWebsite\ModuleOnePageWebsiteCustom'        	=> 'system/modules/OnePageWebsite/modules/ModuleOnePageWebsiteCustom.php',
-	'OnePageWebsite\ModuleOnePageWebsiteNavigation' 	=> 'system/modules/OnePageWebsite/modules/ModuleOnePageWebsiteNavigation.php',
-	'OnePageWebsite\ModuleOnePageWebsiteRegular'    	=> 'system/modules/OnePageWebsite/modules/ModuleOnePageWebsiteRegular.php',
+	'OnePageWebsite\OnePageWebsite'								=> 'system/modules/onepagewebsite/OnePageWebsite/OnePageWebsite.php',
+	'OnePageWebsite\Backend\TableModule'						=> 'system/modules/onepagewebsite/OnePageWebsite/Backend/TableModule.php',
+	'OnePageWebsite\Frontend\ModuleOnePageWebsiteCustom'        => 'system/modules/onepagewebsite/OnePageWebsite/Frontend/ModuleOnePageWebsiteCustom.php',
+	'OnePageWebsite\Frontend\ModuleOnePageWebsiteNavigation' 	=> 'system/modules/onepagewebsite/OnePageWebsite/Frontend/ModuleOnePageWebsiteNavigation.php',
+	'OnePageWebsite\Frontend\ModuleOnePageWebsiteRegular'    	=> 'system/modules/onepagewebsite/OnePageWebsite/Frontend/ModuleOnePageWebsiteRegular.php',
 ));
 
 /**
@@ -39,8 +37,8 @@ ClassLoader::addClasses(array
  */
 TemplateLoader::addFiles(array
 (
-	'mod_onepage'         				=> 'system/modules/OnePageWebsite/templates',
-	'moo_smoothScroll' 					=> 'system/modules/OnePageWebsite/templates',
-	'opw_default'     					=> 'system/modules/OnePageWebsite/templates',
-	'moo_onepagewebsitenavigation' 		=> 'system/modules/OnePageWebsite/templates',
+	'mod_onepage'         				=> 'system/modules/onepagewebsite/templates',
+	'moo_smoothScroll' 					=> 'system/modules/onepagewebsite/templates',
+	'opw_default'     					=> 'system/modules/onepagewebsite/templates',
+	'moo_onepagewebsitenavigation' 		=> 'system/modules/onepagewebsite/templates',
 ));
