@@ -29,7 +29,6 @@ window.addEvent('domready', function()
 		} 
 	}
 	
-	
 	var last = null;
 		
 	// circle through all navigation elements
@@ -41,9 +40,10 @@ window.addEvent('domready', function()
 		// set state on load
 		objAnchors.each(function(anchor)
 		{
-			var href = anchor.get('href');
+			var href = '/'+anchor.get('href');
+			href = href.replace(location.pathname,'');
 			href = href.replace('#', '');
-			
+				
 			// anchor is set
 			if(params.contains(href))
 			{
@@ -66,23 +66,15 @@ window.addEvent('domready', function()
 		// add eventhandlers
 		objAnchors.addEvent('click',function()
 		{
-			if(last != this)
-			{
-				if(last != null)
-				{
-					last.removeClass('active');
-					last.getParent('li').removeClass('active');
-				}
-				
-				// get anchor
-				var href = this.get('href');
-				href = href.replace('#', '');
-				
-				this.addClass('active');
-				this.getParent('li').addClass('active');
-				
-				last = this;
-			}
+			objAnchors.removeClass('active');
+			
+			// get anchor
+			var href = this.get('href');
+			href = href.replace('#', '');
+			
+			this.addClass('active');
+			this.getParent('li').addClass('active');
+			last = this;
 		});
 	});
 
