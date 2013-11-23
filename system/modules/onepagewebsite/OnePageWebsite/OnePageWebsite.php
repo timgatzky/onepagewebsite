@@ -186,26 +186,23 @@ class OnePageWebsite extends \Controller
 				$subpages = $this->generatePagesRecursiv($objSubpages->id, $level, $strTemplate);
 			}
 			
-			$strClass = ' page page_' . $count;
-			$strClass .= (($subpages != '') ? ' subpage' : '') . ($objSubpages->protected ? ' protected' : '') . (($objSubpages->cssClass != '') ? ' ' . $objSubpages->cssClass : '');
-			$strCssId = 'page'.$objSubpages->id;
+			$arrClass = array('page','page_'.$count);
+			// even odd
+			$count%2 == 0 ? $arrClass[] = 'even' : $arrClass[] = 'odd';
+			$arrClass[] = (($subpages != '') ? $arrClass[] = 'subpage' : '') . ($objSubpages->protected ? $arrClass[] = 'protected' : '') . (($objSubpages->cssClass != '') ? $arrClass[] = $objSubpages->cssClass : '');
+			$arrClass = array_unique($arrClass);
 			
 			$items[] = array
 			(
 				'id'			=> $objSubpages->id,
-				'cssId'			=> 'id="'.$strCssId.'"',
-				'class'			=> trim($strClass),
+				'cssId'			=> 'id="page'.$objSubpages->id.'"',
+				'class'			=> implode(' ', $arrClass),
 				'subpages'		=> $subpages,
 				'content'		=> $this->getSinglePageData($objSubpages->id),#$this->arrPageData[$objSubpages->id],
 				'row'			=> $objSubpages->row()
 			);
 			
 			$count++;
-		}
-		
-		if(empty($items))
-		{
-			return '';
 		}
 		
 		// add class first and last
@@ -491,10 +488,10 @@ class OnePageWebsite extends \Controller
 
 			$arrReturn[] = array
 			(
-				'id'   => $objArticles->id,
-				'pid'   => $objArticles->pid,
-				'col'  => $objArticles->inColumn,
-				'html'   => $strHtml,
+				'id'	=> $objArticles->id,
+				'pid'	=> $objArticles->pid,
+				'col'	=> $objArticles->inColumn,
+				'html'	=> $strHtml,
 			);
 		}
 
