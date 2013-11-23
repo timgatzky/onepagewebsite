@@ -314,11 +314,10 @@ class OnePageWebsite extends \Controller
 			}
 			
 			// walk parents backwards to find an inherited layout
-			$arrParents = array_reverse($arrParents);
+			#$arrParents = array_reverse($arrParents);
 			
 			// fetch parent pages
-			$objParents = $objDatabase->prepare("SELECT * FROM tl_page WHERE id IN(".implode(',',$arrParents).")")
-							->execute();
+			$objParents = $objDatabase->prepare("SELECT * FROM tl_page WHERE id IN(".implode(',',$arrParents).")")->execute();
 			if($objParents->numRows < 1)
 			{
 				continue;
@@ -326,27 +325,19 @@ class OnePageWebsite extends \Controller
 			
 			while($objParents->next())
 			{
-				$objLayout = $objDatabase->prepare("SELECT * FROM tl_layout WHERE id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")
-									->limit(1)
-									->execute($objParents->id);
-				if($objLayout->numRows < 1)
+				if($objParents->includeLayout)
 				{
-					// check next parent
-					continue;
+					$objLayout = $objDatabase->prepare("SELECT * FROM tl_layout WHERE id=?")->limit(1)->execute($objParents->layout);
 				}
 			}
 		}
 		
-		
-		// try fallback if no layout is selected or inherited to this page
+		// fallback, use default layout defined in root page
 		if($objLayout->numRows < 1)
 		{
-			// no fallback in contao 3!!!
-			// fetch layout from root page, inherited in global page object
-			$objLayout = $objDatabase->prepare("SELECT * FROM tl_layout WHERE id=?")
-			   					->limit(1)
-			   					->execute($objPage->layout);
-			
+			$objLayout = $objDatabase->prepare("SELECT * FROM tl_layout WHERE id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")
+									->limit(1)
+									->execute($objPage->rootId);
 			if($objLayout->numRows < 1)
 			{
 			   throw new \Exception($GLOBALS['TL_LANG']['ONEPAGEWEBSITE']['no_layout']);
