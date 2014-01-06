@@ -24,6 +24,12 @@ namespace OnePageWebsite\Frontend;
 class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 {
 	/**
+	 * Template
+	 * @var string
+	 */
+	protected $strTemplate = 'mod_onepagewebsitenavigation';
+	
+	/**
 	 * Display a wildcard in the back end
 	 * @return string
 	 */
@@ -36,6 +42,15 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 			$this->Template->title = $this->headline;
 
 			return $this->Template->parse();
+		}
+		
+		
+		// if no id is given, generate one
+		$arrCssID = deserialize($this->cssID);
+		if(strlen($arrCssID[0]) < 1)
+		{
+			$arrCssID[0] = 'onepagewebsitenavigation_'.$this->id;
+			$this->cssID = $arrCssID;
 		}
 		
 		return parent::generate();
@@ -73,7 +88,10 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 		{
 			$this->jumpTo = $objPage->id;
 		}
-	
+		
+		// js selector
+		$this->Template->naviID = $this->cssID[0];
+		
 		//(issue #2)
 		$this->Template->skipId = 'skipNavigation' . $this->id;
 		$this->Template->skipNavigation = specialchars($GLOBALS['TL_LANG']['MSC']['skipNavigation']);
