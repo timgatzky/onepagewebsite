@@ -15,6 +15,4 @@
 $GLOBALS['TL_LANG']['tl_module']['opw_template'] 		= array('Structure template', 'Please choose the template file.');
 $GLOBALS['TL_LANG']['tl_module']['opw_mod_template'] 	= array('Module template', 'Please choose the template file.');
 $GLOBALS['TL_LANG']['tl_module']['rootModule'] 			= array('Reference module', 'Please choose a reference module.');
-
-
-?>
+$GLOBALS['TL_LANG']['tl_module']['opw_scrolldetection'] = array('Scroll detection', 'The navigation reacts to the scroll position.');
