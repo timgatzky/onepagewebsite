@@ -171,7 +171,7 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 				}
 				
 				// href
-				if($objJumpTo->id != $objPage->id)
+				if($objJumpTo->id != $objPage->id && $objJumpTo->id > 0)
 				{
 					$href = $this->generateFrontendUrl($objJumpTo->row()) . '#page' .$objSubpages->id;
 				}
