@@ -169,9 +169,9 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 				{
 					$subitems = $this->renderNavigation($objSubpages->id, $level);
 				}
-
+				
 				// href
-				if($objJumpTo->id != $objPage->id || $objPage->id != $objPage->rootId)
+				if($objJumpTo->id != $objPage->id)
 				{
 					$href = $this->generateFrontendUrl($objJumpTo->row()) . '#page' .$objSubpages->id;
 				}
