@@ -106,10 +106,10 @@ window.addEvent('scroll', function()
 	
 	var last = null;
 	var objNaviElements = objNavi.getElements('li'); //$$('.mod_onepagewebsitenavigation li');
-	var objPages = $$('.mod_onepagewebsiteregular li');
+	var objPages = $$('.mod_onepagewebsiteregular .page');
 	if(objPages.length < 1)
 	{
-		objPages = $$('.mod_onepagewebsitecustom li');
+		objPages = $$('.mod_onepagewebsitecustom .page');
 	}
 	
 	if(objNaviElements.length < 1 || objPages.length < 1)
