@@ -124,8 +124,8 @@ window.addEvent('scroll', function()
 	objSizeWindow.x = window.innerWidth;
 	objSizeWindow.y = window.innerHeight;
 	
-	var intOffsetX = 0; // move the X break point further left or right
-	var intOffsetY = 0; // move the Y break point higher or lower
+	var intOffsetX = 0; // move the X break point further left or right; for full-width layouts set a negative value (-1)  
+	var intOffsetY = 0; // move the Y break point higher or lower; for full-height layouts set a negative value (-1) 
 	
 	objPages.each(function(elem, index)
 	{
