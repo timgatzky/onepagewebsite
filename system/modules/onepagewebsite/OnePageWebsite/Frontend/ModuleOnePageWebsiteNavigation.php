@@ -157,7 +157,7 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 			{
 				continue;
 			}
-
+			
 			$subitems = '';
 			$_groups = deserialize($objSubpages->groups);
 
@@ -177,7 +177,7 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 				}
 				else
 				{
-					$href = '#page' .$objSubpages->id;
+					$href = \Environment::get('request').'#page' .$objSubpages->id;
 				}
 				
 				$strClass = (($subitems != '') ? 'submenu' : '') . ($objSubpages->protected ? ' protected' : '') . (($objSubpages->cssClass != '') ? ' ' . $objSubpages->cssClass : '') . (in_array($objSubpages->id, $objPage->trail) ? ' trail' : '');
