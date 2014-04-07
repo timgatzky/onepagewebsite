@@ -307,6 +307,11 @@ class OnePageWebsite extends \Controller
 			$arrParents = $tmp;
 			unset($tmp);
 			
+			// move on to next page
+			if(count($arrParents) < 1)
+			{
+				return;
+			}
 
 			// walk parents backwards to find an inherited layout
 			#$arrParents = array_reverse($arrParents);
@@ -314,6 +319,11 @@ class OnePageWebsite extends \Controller
 			// fetch parent pages
 			$objParents = $objDatabase->prepare("SELECT * FROM tl_page WHERE id IN(".implode(',',$arrParents).")")->execute();
 
+			if($objParents->numRows < 1)
+			{
+				return;
+			}
+			
 			while($objParents->next())
 			{
 				if($objParents->includeLayout)
