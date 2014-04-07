@@ -12,6 +12,7 @@
  * permanent text corrections which are update-safe. 
  */
 
+$GLOBALS['TL_LANG']['tl_module']['showHidden'] 		    = array('Versteckte Seiten anzeigen', 'Menüpunkte [nur im OnePageMenu] anzeigen, die sonst in der Standard-Navigation nicht sichtbar.');
 $GLOBALS['TL_LANG']['tl_module']['opw_template'] 		= array('Struktur-Template', 'Bitte Wählen Sie ein Template aus.');
 $GLOBALS['TL_LANG']['tl_module']['opw_mod_template'] 	= array('Modul-Template', 'Bitte Wählen Sie ein Template aus.');
 $GLOBALS['TL_LANG']['tl_module']['rootModule'] 			= array('Referenzmodul', 'Bitte Wählen Sie das Referenzmodul aus.');
