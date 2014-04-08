@@ -1,0 +1,18 @@
+<?php
+$GLOBALS['TL_JAVASCRIPT']['jquery_smoothscroll'] = '/system/modules/smarterdesign-onefullpage/assets/js/jquery.smooth-scroll.min.js|static';ksort($GLOBALS['TL_JAVASCRIPT']);
+?>
+<script type="text/javascript">
+	jQuery(function($){
+		$('a').smoothScroll(
+			{
+				speed: 800,
+				beforeScroll: function() {
+					$('body').addClass('opw_animate');
+				},
+				afterScroll: function() {
+					$('body').removeClass('opw_animate');
+				}
+			}
+		);
+	});
+</script>

@@ -20,7 +20,7 @@ $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] 			= array('OnePa
  */
 $GLOBALS['TL_DCA']['tl_module']['palettes']['onepagewebsiteregular'] 	= '{title_legend},name,headline,type;{nav_legend},showLevel,hardLimit,showProtected;{reference_legend:hide},defineRoot;{template_legend:hide},opw_template,opw_mod_template;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['onepagewebsitecustom'] 	= '{title_legend},name,headline,type;{nav_legend},showProtected,pages;{template_legend:hide},opw_template,opw_mod_template;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
-$GLOBALS['TL_DCA']['tl_module']['palettes']['onepagewebsitenavigation']	= '{title_legend},name,headline,type;{nav_legend},jumpTo,rootPage;{template_legend:hide},navigationTpl,opw_scrolldetection;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['onepagewebsitenavigation']	= '{title_legend},name,headline,type;{nav_legend},showHidden,jumpTo,rootPage;{template_legend:hide},navigationTpl,opw_scrolldetection;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 
 
 /**
