@@ -1,0 +1,162 @@
+<script type="text/javascript">
+
+	/**
+	 * Toggle active state for OnePageWebsite Navigation module
+	 */
+	jQuery(function ($)
+	{
+		var objNavi = $('#' + opw.naviID);
+
+		// examine url params for hash params
+		var strHash = window.location.hash;
+		var arrHash = strHash.split("#");
+		var arrParamsIgnore = new Array('top');
+		var params = new Array();
+		for (var i = 0; i < arrHash.length; ++i)
+		{
+			if (arrHash[i].length > 0)
+			{
+				var hash = arrHash[i].replace('#', '');
+				if (!arrParamsIgnore.contains(hash))
+				{
+					params.push(arrHash[i]);
+				}
+			}
+		}
+
+		var last = null;
+
+		// circle through all navigation elements
+		// get all possible buttons
+		var objAnchors = $('li > a', objNavi);
+		// set state on load
+		objAnchors.each(function ()
+		{
+			var $this = $(this);
+			var href = '/' + this.get('href');
+			href = href.replace(location.pathname, '');
+			href = href.replace('#', '');
+			// anchor is set
+			if (params.contains(href))
+			{
+				$this.addClass('active');
+				$this.parent('li').addClass('active');
+
+				last = $this;
+			}
+		});
+
+		// set first button to active when on first page of website and no anchor is set
+		var strRequest = opw.strRequest;
+		if (location.hash.length == 0)
+		{
+			$(objAnchors[0]).addClass('active');
+			$(objAnchors[0]).parent('li').addClass('active');
+			last = $(objAnchors[0]);
+		}
+
+		// add eventhandlers
+		objAnchors.bind('click', function ()
+		{
+			var $this = $(this);
+
+			$('.active', objNavi).removeClass('active');
+			$(this).addClass('active');
+			this.getParent('li').addClass('active');
+			last = $this;
+		});
+
+		if (opw.opw_scrollDetection)
+		{
+			/**
+			 * Set navi active on scroll
+			 */
+			$(window).bind('scroll', function ()
+			{
+
+				if ($('body').hasClass('opw_animate'))
+				{
+					return;
+				}
+				var objNavi = $('#' + opw.naviID);
+				var last = null;
+				var objNaviElements = $('li', objNavi); //$$('.mod_onepagewebsitenavigation li');
+				var objPages = $('.mod_onepagewebsiteregular .page');
+				if (objPages.length < 1)
+				{
+					objPages = $('.mod_onepagewebsitecustom .page');
+				}
+
+				if (objNaviElements.length < 1 || objPages.length < 1)
+				{
+					return;
+				}
+
+				var objRelativeTo = document.window;
+				var objPosRelative = objRelativeTo.getPosition();
+				var objScroll = objRelativeTo.getScroll()
+				var objSizeWindow = new Object;
+				objSizeWindow.x = window.innerWidth;
+				objSizeWindow.y = window.innerHeight;
+
+				var intOffsetX = 0; // move the X break point further left or right; for full-width layouts set a negative value (-1)
+				var intOffsetY = 0; // move the Y break point higher or lower; for full-height layouts set a negative value (-1)
+
+				objPages.each(function (index, elem)
+				{
+					var pos = elem.getPosition();
+					var size = elem.getSize();
+
+					var breakPointX = (objPosRelative.x + intOffsetX);
+					var breakPointY = (objPosRelative.y + intOffsetY);
+					if (objRelativeTo != document.window || objRelativeTo != window)
+					{
+						pos = elem.getPosition(objRelativeTo);
+					}
+
+					var deltaX = (pos.x - objScroll.x);
+					var deltaY = (pos.y - objScroll.y);
+
+					// vertical scrolling
+					if (deltaY <= breakPointY)
+					{
+						objNaviElements.removeClass('active');
+						$('a', objNaviElements).removeClass('active');
+
+						if (objNaviElements[index])
+						{
+							$(objNaviElements[index]).addClass('active');
+							$('a', objNaviElements[index]).addClass('active');
+							last = $(objNaviElements[index]);
+						}
+						else if (last)
+						{
+							last.addClass('active');
+							$('a', last).addClass('active');
+						}
+					}
+
+					// horizontal scrolling
+					if (deltaX <= breakPointX)
+					{
+						objNaviElements.removeClass('active');
+						$('a', objNaviElements).removeClass('active');
+
+						if (objNaviElements[index])
+						{
+							$(objNaviElements[index]).addClass('active');
+							$('a', objNaviElements[index]).addClass('active');
+							last = $(objNaviElements[index]);
+						}
+						else
+						{
+							last.addClass('active');
+							$('a', last).addClass('active');
+						}
+					}
+				});
+			});
+		}
+	});
+</script>
+
