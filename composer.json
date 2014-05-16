@@ -22,7 +22,7 @@
 	{
 		"php":">=5.3",
 		"contao/core":">=3",
-		"contao-community-alliance/composer-installer":"*",
+		"contao-community-alliance/composer-installer":"*"
 	},
 	"autoload":
 	{
