@@ -307,10 +307,9 @@ class OnePageWebsite extends \Controller
 			$arrParents = $tmp;
 			unset($tmp);
 			
-			// move on to next page
 			if(count($arrParents) < 1)
 			{
-				continue;
+				return $this->fetchRootPageLayout();;
 			}
 			
 			// walk parents backwards to find an inherited layout
@@ -318,36 +317,36 @@ class OnePageWebsite extends \Controller
 			
 			// fetch parent pages
 			$objParents = $objDatabase->prepare("SELECT * FROM tl_page WHERE id IN(".implode(',',$arrParents).")")->execute();
-			if($objParents->numRows < 1)
-			{
-				continue;
-			}
-			
 			while($objParents->next())
 			{
 				if($objParents->includeLayout)
 				{
 					$objLayout = $objDatabase->prepare("SELECT * FROM tl_layout WHERE id=?")->limit(1)->execute($objParents->layout);
+					return $objLayout;
 				}
 			}
 		}
 		
-		// fallback, use default layout defined in root page
+		return $this->fetchRootPageLayout();
+	}
+	
+	
+	/**
+	 * Fetch root page layout
+	 * @return object
+	 */
+	protected function fetchRootPageLayout()
+	{
+		global $objPage;
+		
+		$objLayout = $objDatabase->prepare("SELECT * FROM tl_layout WHERE id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")->limit(1)->execute($objPage->rootId);
 		if($objLayout->numRows < 1)
 		{
-			$objLayout = $objDatabase->prepare("SELECT * FROM tl_layout WHERE id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")
-									->limit(1)
-									->execute($objPage->rootId);
-			if($objLayout->numRows < 1)
-			{
-			   throw new \Exception($GLOBALS['TL_LANG']['ONEPAGEWEBSITE']['no_layout']);
-			}
+		   throw new \Exception($GLOBALS['TL_LANG']['ONEPAGEWEBSITE']['no_layout']);
 		}
-				
 		
 		return $objLayout;
 	}
-	
 	
 	
 	/**
