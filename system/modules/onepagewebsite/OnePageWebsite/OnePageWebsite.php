@@ -156,6 +156,14 @@ class OnePageWebsite extends \Controller
 			return '';
 		}
 		
+		// Get all groups of the current front end user
+		$groups = array();
+		if (FE_USER_LOGGED_IN)
+		{
+			$this->import('FrontendUser', 'User');
+			$groups = $this->User->groups;
+		}
+		
 		if($strTemplate == '')
 		{
 			$strTemplate = 'opw_default';
@@ -178,9 +186,10 @@ class OnePageWebsite extends \Controller
 			}
 			
 			$subpages = '';
+			$_groups = deserialize($objSubpages->groups);
 			
 			// do the same as the navigation here
-			if ($objSubpages->subpages > 0 && (!$this->showLevel || $this->showLevel >= $level || (!$this->hardLimit && ($objPage->id == $objSubpages->id || in_array($objPage->id, $this->getChildRecords($objSubpages->id, 'tl_page'))))))
+			if (!$objSubpages->protected || BE_USER_LOGGED_IN || (is_array($_groups) && count(array_intersect($_groups, $groups))) || $objSubpages->subpages > 0 && (!$this->showLevel || $this->showLevel >= $level || (!$this->hardLimit && ($objPage->id == $objSubpages->id || in_array($objPage->id, $this->getChildRecords($objSubpages->id, 'tl_page'))))))
 			{
 				#fix 4
 				$subpages = $this->generatePagesRecursiv($objSubpages->id, $level, $strTemplate);

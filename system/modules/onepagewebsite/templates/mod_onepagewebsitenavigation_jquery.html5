@@ -1,0 +1,154 @@
+
+<!-- indexer::stop -->
+<nav class="<?php echo $this->class; ?> block"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
+
+  <?php if ($this->headline): ?>
+    <<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
+  <?php endif; ?>
+
+  <a href="<?php echo $this->request; ?>#<?php echo $this->skipId; ?>" class="invisible"><?php echo $this->skipNavigation; ?></a>
+
+  <?php echo $this->items; ?>
+
+  <a id="<?php echo $this->skipId; ?>" class="invisible">&nbsp;</a>
+
+</nav>
+<!-- indexer::continue -->
+
+<script type="text/javascript">
+/* <![CDATA[ */
+
+/**
+ * Toggle active state for OnePageWebsite Navigation module
+ */
+jQuery(document).ready(function()
+{
+	var objNavi = jQuery('#<?php echo $this->naviID; ?>');
+	
+	// examine url params for hash params
+	var strHash = window.location.hash;
+	var arrHash = strHash.split("#");
+	var arrParamsIgnore = new Array('top');
+	var params = new Array();
+	for(var i=0; i<arrHash.length; ++i)
+	{
+		if(arrHash[i].length > 0)
+		{
+			var hash = arrHash[i].replace('#','');
+			if(!arrParamsIgnore.contains(hash))
+			{
+				params.push(arrHash[i]);
+			}
+		} 
+	}
+	
+	var last = null;
+		
+	// circle through all navigation elements
+	// get all possible buttons
+	var objAnchors = objNavi.find('li > a');
+	// set state on load
+	objAnchors.each(function(index,anchor)
+	{
+		var anchor = jQuery(anchor);
+		var href = '/'+jQuery(anchor).attr('href');
+		href = href.replace(location.pathname,'');
+		href = href.replace('#', '');
+		// anchor is set
+		if(params.contains(href))
+		{
+			anchor.addClass('active');
+			anchor.getParent('li').addClass('active');
+		
+			last = anchor;
+		}
+	});
+	
+	// set first button to active when on first page of website and no anchor is set
+	var strRequest = '<?php echo $this->replaceInsertTags('{{env::request}}') ?>';
+	if(location.hash.length == 0 && strRequest.length == 0)
+	{
+		objAnchors[0].addClass('active');
+		objAnchors[0].getParent('li').addClass('active');
+		last = objAnchors[0];
+	}
+	
+	// add eventhandlers
+	objAnchors.click(function()
+	{
+		if(last)
+		{
+			last.removeClass('active');
+			last.getParent('li').removeClass('active');
+		}
+		
+		// get anchor
+		var href = this.get('href');
+		href = href.replace('#', '');
+		this.addClass('active');
+		this.getParent('li').addClass('active');
+		last = this;
+	});
+	
+});
+/* ]]> */
+</script>
+
+<?php if($this->opw_scrolldetection): ?>
+<script type="text/javascript">
+/* <![CDATA[ */
+
+/**
+ * Set navi active on scroll
+ */
+jQuery(document).ready(function()
+{
+	var links = jQuery("#<?php echo $this->naviID; ?> a");
+	
+	jQuery(window).scroll(function()
+	{
+		var scrollY = jQuery(window).scrollTop();
+		var offsetY = 0;
+		var toleranceY = 0;
+		var wh = jQuery(window).height(); // view port
+		var dh = jQuery(document).height(); // document height
+
+		jQuery.each(links, function(index, elem)
+		{
+			var hash = elem.href.split("#");
+			if(!hash[1])
+			{
+				return;
+			}
+			var anchor = hash[1].toString();
+			var target = jQuery("#"+anchor);
+			if(target.length < 1)
+			{
+				return;
+			}
+			
+			// vertical scrolling
+			var posY = target.offset().top - offsetY - toleranceY;
+			var sizeY = posY + target.height();
+			
+			var relPosY = Math.abs(sizeY - dh); // element position relative viewport
+			var relScrollY = Math.abs(dh - scrollY) - wh; // scroll amount relative to scrolled viewport
+			
+			// check if target is in the window
+			if(relPosY <= relScrollY && relScrollY <= wh)
+			{
+				links.removeClass("active");
+				jQuery(elem).addClass("active");
+			}
+			else if ( (posY <= scrollY && sizeY >= scrollY)  ) 
+	        {
+	        	links.removeClass("active");
+				jQuery(elem).addClass("active");
+	        }
+		});
+	});
+});
+
+/* ]]> */
+</script>
+<?php endif; ?>
