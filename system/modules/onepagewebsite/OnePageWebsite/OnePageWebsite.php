@@ -348,7 +348,7 @@ class OnePageWebsite extends \Controller
 	{
 		global $objPage;
 		
-		$objLayout = $objDatabase->prepare("SELECT * FROM tl_layout WHERE id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")->limit(1)->execute($objPage->rootId);
+		$objLayout = \Database::getInstance()->prepare("SELECT * FROM tl_layout WHERE id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")->limit(1)->execute($objPage->rootId);
 		if($objLayout->numRows < 1)
 		{
 		   throw new \Exception($GLOBALS['TL_LANG']['ONEPAGEWEBSITE']['no_layout']);
