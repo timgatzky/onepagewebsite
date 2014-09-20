@@ -1,0 +1,5 @@
+### 2.1.1
+Added: Anchor with alias in navigation. Call via: $item['href_alias'] in template
+
+### < 2.1.0
+see commits
