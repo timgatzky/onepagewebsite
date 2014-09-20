@@ -171,13 +171,18 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 				}
 				
 				// href
+				$href = '';
+				$href_alias = '';
 				if($objJumpTo->id != $objPage->id && $objJumpTo->id > 0)
 				{
-					$href = $this->generateFrontendUrl($objJumpTo->row()) . '#page' .$objSubpages->id;
+					$url = $this->generateFrontendUrl($objJumpTo->row());
+					$href = $url . '#page' .$objSubpages->id;
+					$href_alias = $url . '#' .$objSubpages->alias;
 				}
 				else
 				{
 					$href = \Environment::get('request').'#page' .$objSubpages->id;
+					$href_alias = \Environment::get('request').'#' .$objSubpages->alias;
 				}
 				
 				$strClass = (($subitems != '') ? 'submenu' : '') . ($objSubpages->protected ? ' protected' : '') . (($objSubpages->cssClass != '') ? ' ' . $objSubpages->cssClass : '') . (in_array($objSubpages->id, $objPage->trail) ? ' trail' : '');
@@ -197,6 +202,7 @@ class ModuleOnePageWebsiteNavigation extends \ModuleNavigation
 				$row['pageTitle'] = specialchars($objSubpages->pageTitle, true);
 				$row['link'] = $objSubpages->title;
 				$row['href'] = $href;
+				$row['href_alias'] = $href_alias;
 				$row['nofollow'] = (strncmp($objSubpages->robots, 'noindex', 7) === 0);
 				$row['target'] = '';
 				$row['description'] = str_replace(array("\n", "\r"), array(' ' , ''), $objSubpages->description);
