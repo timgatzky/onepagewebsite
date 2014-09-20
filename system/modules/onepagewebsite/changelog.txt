@@ -1,4 +1,4 @@
-### 2.1.1
+### 2.2.0
 Added: Anchor with alias in navigation. Call via: $item['href_alias'] in template (#14)
 Added: nav_ope_alias template (#16)
 Removed: moo_onepagenavigation template from autoload.php => no more fallbacks (#15)
