@@ -40,7 +40,6 @@ TemplateLoader::addFiles(array
 (
 	'mod_onepage'					=> 'system/modules/onepagewebsite/templates',
 	'mod_onepagewebsitenavigation'	=> 'system/modules/onepagewebsite/templates',
-	'moo_onepagewebsitenavigation'	=> 'system/modules/onepagewebsite/templates',
 	'moo_smoothScroll'				=> 'system/modules/onepagewebsite/templates',
 	'opw_default'					=> 'system/modules/onepagewebsite/templates',
 ));
