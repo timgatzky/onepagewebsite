@@ -325,12 +325,12 @@ class OnePageWebsite extends \Controller
 			#$arrParents = array_reverse($arrParents);
 			
 			// fetch parent pages
-			$objParents = $objDatabase->prepare("SELECT * FROM tl_page WHERE id IN(".implode(',',$arrParents).")")->execute();
-			while($objParents->next())
+			foreach($arrParents as $pid)
 			{
-				if($objParents->includeLayout)
+				$objParent = $objDatabase->prepare("SELECT * FROM tl_page WHERE id = ?")->execute( $pid ); 
+				if($objParent->includeLayout)
 				{
-					$objLayout = $objDatabase->prepare("SELECT * FROM tl_layout WHERE id=?")->limit(1)->execute($objParents->layout);
+					$objLayout = $objDatabase->prepare("SELECT * FROM tl_layout WHERE id=?")->limit(1)->execute($objParent->layout);
 					return $objLayout;
 				}
 			}
