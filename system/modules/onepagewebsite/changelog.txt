@@ -1,3 +1,6 @@
+### 2.2.1
+Fixed: getPageLayout did not return the correct page layout by the order of the parent pages (#19)
+
 ### 2.2.0
 Added: Anchor with alias in navigation. Call via: $item['href_alias'] in template (#14)
 Added: nav_ope_alias template (#16)
