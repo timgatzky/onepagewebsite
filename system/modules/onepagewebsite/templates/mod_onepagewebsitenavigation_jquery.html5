@@ -50,15 +50,15 @@ jQuery(document).ready(function()
 	// set state on load
 	objAnchors.each(function(index,anchor)
 	{
-		var anchor = jQuery(anchor);
-		var href = '/'+jQuery(anchor).attr('href');
+		anchor = jQuery(anchor);
+		var href = '/'+anchor.attr('href');
 		href = href.replace(location.pathname,'');
 		href = href.replace('#', '');
 		// anchor is set
 		if(params.contains(href))
 		{
 			anchor.addClass('active');
-			anchor.getParent('li').addClass('active');
+			anchor.parent('li').addClass('active');
 		
 			last = anchor;
 		}
@@ -66,28 +66,31 @@ jQuery(document).ready(function()
 	
 	// set first button to active when on first page of website and no anchor is set
 	var strRequest = '<?php echo $this->replaceInsertTags('{{env::request}}') ?>';
-	if(location.hash.length == 0 && strRequest.length == 0)
+	if(location.hash.length === 0 && strRequest.length === 0)
 	{
-		objAnchors[0].addClass('active');
-		objAnchors[0].getParent('li').addClass('active');
-		last = objAnchors[0];
+                var tmp = jQuery(objAnchors[0]);
+		tmp.addClass('active');
+		tmp.parent('li').addClass('active');
+		last = tmp;
 	}
-	
+
 	// add eventhandlers
 	objAnchors.click(function()
 	{
 		if(last)
 		{
 			last.removeClass('active');
-			last.getParent('li').removeClass('active');
+			last.parent('li').removeClass('active');
 		}
 		
+                var self = jQuery(this);
+
 		// get anchor
-		var href = this.get('href');
+		var href = self.attr('href');
 		href = href.replace('#', '');
-		this.addClass('active');
-		this.getParent('li').addClass('active');
-		last = this;
+		self.addClass('active');
+		self.parent('li').addClass('active');
+		last = self;
 	});
 	
 });
