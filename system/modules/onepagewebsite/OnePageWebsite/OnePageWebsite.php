@@ -305,32 +305,22 @@ class OnePageWebsite extends \Controller
 			// get parent ids
 			$arrParents = $this->getParentRecords('tl_page',$intPage);
 			
-			$tmp = array();
-			foreach($arrParents as $id)
-			{
-				if($id > 0 && $id != $objPage->rootId)
-				{
-					$tmp[] = $id;
-				}
-			}
-			$arrParents = $tmp;
-			unset($tmp);
-			
-			if(count($arrParents) < 1)
+			// if there is just the root page, return the root page layout
+			if(count($arrParents) < 1 || $arrParents[0] == $objPage->rootId)
 			{
 				return $this->fetchRootPageLayout();;
 			}
 			
-			// walk parents backwards to find an inherited layout
-			#$arrParents = array_reverse($arrParents);
-			
-			// fetch parent pages
-			$objParents = $objDatabase->prepare("SELECT * FROM tl_page WHERE id IN(".implode(',',$arrParents).")")->execute();
-			while($objParents->next())
+			foreach($arrParents as $id)
 			{
-				if($objParents->includeLayout)
+				if($id == $objPage->rootId)
 				{
-					$objLayout = $objDatabase->prepare("SELECT * FROM tl_layout WHERE id=?")->limit(1)->execute($objParents->layout);
+					continue;
+				}
+				
+				$objLayout = $objDatabase->prepare("SELECT * FROM tl_layout WHERE id=(SELECT layout FROM tl_page WHERE id=? AND includeLayout=1)")->limit(1)->execute($id);
+				if($objLayout->numRows > 0)
+				{
 					return $objLayout;
 				}
 			}
