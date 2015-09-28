@@ -1,3 +1,6 @@
+### 2.2.2
+Fixed: jQuery issues in mod_onepagewebsitenavigation_jquery.html5 (#21)
+
 ### 2.2.1
 Fixed: getPageLayout did not return the correct page layout by the order of the parent pages (#19)
 
